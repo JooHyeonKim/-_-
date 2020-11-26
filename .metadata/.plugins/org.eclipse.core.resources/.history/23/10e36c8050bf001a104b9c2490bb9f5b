@@ -1,0 +1,14 @@
+package Basic;
+
+public class finalExam {
+	public static void main(String[] args) {
+		Ticket t1=new Ticket();
+		t1.getTicketNumber(); //1
+		Ticket.getNumberSold(); //1
+		
+		Ticket t2=new Ticket();
+		t2.getTicketNumber(); //2
+		Ticket.getNumberSold(); //2
+	}
+
+}

@@ -1,0 +1,12 @@
+package rsa2;
+
+public class user {
+	int no;
+	char name;
+	int resident_no;
+	char address;
+	int phone_no;
+	int borrow_num;
+	int x; //location
+	int y; //location
+}

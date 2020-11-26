@@ -1,0 +1,26 @@
+package rsa2;
+
+public class User {
+	int no;
+	char name;
+	int resident_no;
+	char address;
+	int phone_no;
+	int borrow_num;
+	int x; //location
+	int y; //location
+	
+	public User(int n, char name,int rn, char a, int p, int b, int x1, int y1) {
+		no=n;
+		this.name=name;
+		this.resident_no=rn;
+		this.address=a;
+		this.phone_no=p;
+		this.borrow_num=b;
+		this.x=x1;
+		this.y=y1;
+	}
+}
+
+
+ 

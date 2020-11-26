@@ -1,0 +1,19 @@
+package rsa3;
+
+public class User {
+	int no;
+	String name;
+	int resident_no;
+	String address;
+	int phone_no;
+	int borrow_num;
+	
+//	public User(int n, String name,int rn, String a, int p, int b) {
+//		no=n;
+//		this.name=name;
+//		this.resident_no=rn;
+//		this.address=a;
+//		this.phone_no=p;
+//		this.borrow_num=b;
+//	}
+}

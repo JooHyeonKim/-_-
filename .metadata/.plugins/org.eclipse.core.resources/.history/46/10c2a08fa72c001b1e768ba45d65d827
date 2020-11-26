@@ -1,0 +1,91 @@
+package rsa3;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Base64;
+
+import rsa2.User;
+
+public class RSATest {
+
+    public static void main(String[] args) throws Exception {
+        // RSA 키쌍 생성
+        KeyPair keyPair = CipherUtil.genRSAKeyPair();
+
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
+        
+        BufferedReader fileReader = new BufferedReader(new FileReader("user.txt"));
+
+		// a line from the file
+		String line;
+		String[] person=new String[50];
+		int p=0;
+
+		// read lines until we read a line that is null (i.e. no more lines)
+		while((line = fileReader.readLine()) != null) {
+		       // split the line, returns an array of parts
+		       person[p++] =line; 
+		}
+		
+		User user[]=new User[20];
+		for(int i=1;i<p;i++) {
+			String[] tmp=person[i].split("/");
+			
+			//tmp[0]:회원번호/tmp[1]:회원명/tmp[2]:주민번호/tmp[3]:주소/tmp[4]:전화번호/tmp[5]:대여권수/tmp[6]:위치/
+			
+			//주민번호 암호화
+			String plainText = tmp[2]; 
+			System.out.println(i+"번 회원 "+tmp[1]+"님의 암호화될 주민번호 : "+ plainText);
+			
+			// Base64 인코딩된 암호화 문자열 입니다.
+	        String encrypted = CipherUtil.encryptRSA(plainText, publicKey);
+	        System.out.println("encrypted : " + encrypted);
+	        
+	        // 복호화 합니다.
+	        String decrypted = CipherUtil.decryptRSA(encrypted, privateKey);
+	        System.out.println("decrypted : " + decrypted);
+
+	        // 공개키를 Base64 인코딩한 문자일을 만듭니다.
+	        byte[] bytePublicKey = publicKey.getEncoded();
+	        String base64PublicKey = Base64.getEncoder().encodeToString(bytePublicKey);
+	        System.out.println("Base64 Public Key : " + base64PublicKey);
+
+	        // 개인키를 Base64 인코딩한 문자열을 만듭니다.
+	        byte[] bytePrivateKey = privateKey.getEncoded();
+	        String base64PrivateKey = Base64.getEncoder().encodeToString(bytePrivateKey);
+	        System.out.println("Base64 Private Key : " + base64PrivateKey);
+	        System.out.println();
+	        
+	      //전화번호 암호화
+			String plainText2 = tmp[2]; 
+			System.out.println(i+"번 회원 "+tmp[1]+"님의 암호화될 전화번호 : "+ plainText2);
+			
+			// Base64 인코딩된 암호화 문자열 입니다.
+	        String encrypted2 = CipherUtil.encryptRSA(plainText2, publicKey);
+	        System.out.println("encrypted : " + encrypted);
+	        
+	        // 복호화 합니다.
+	        String decrypted2 = CipherUtil.decryptRSA(encrypted2, privateKey);
+	        System.out.println("decrypted : " + decrypted2);
+
+	        // 공개키를 Base64 인코딩한 문자일을 만듭니다.
+	        byte[] bytePublicKey2 = publicKey.getEncoded();
+	        String base64PublicKey2 = Base64.getEncoder().encodeToString(bytePublicKey2);
+	        System.out.println("Base64 Public Key : " + base64PublicKey2);
+
+	        // 개인키를 Base64 인코딩한 문자열을 만듭니다.
+	        byte[] bytePrivateKey2 = privateKey.getEncoded();
+	        String base64PrivateKey2 = Base64.getEncoder().encodeToString(bytePrivateKey2);
+	        System.out.println("Base64 Private Key : " + base64PrivateKey2);
+	        System.out.println();
+	        System.out.println();
+		}
+		
+		
+    }
+
+}

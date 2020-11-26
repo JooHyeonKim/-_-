@@ -1,0 +1,16 @@
+package Basic;
+
+public class finalExam {
+	public static void main(String[] args) {
+		Ticket t1=new Ticket();
+		System.out.println(t1.getTicketNumber());
+		System.out.println(Ticket.getNumberSold());//1
+		
+		
+		Ticket t2=new Ticket();
+		
+		System.out.println(t2.getTicketNumber());
+		System.out.println(Ticket.getNumberSold());//1
+	}
+
+}

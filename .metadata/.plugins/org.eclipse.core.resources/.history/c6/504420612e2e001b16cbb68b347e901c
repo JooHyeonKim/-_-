@@ -1,0 +1,98 @@
+package huffman;
+
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+public class main {
+	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
+
+		BufferedReader fileReader = new BufferedReader(new FileReader("user.txt"));
+
+		// a line from the file
+		String line;
+		String[] person=new String[50];
+		int p=0;
+
+		// read lines until we read a line that is null (i.e. no more lines)
+		while((line = fileReader.readLine()) != null) {
+		       // split the line, returns an array of parts
+		       person[p++] =line; 
+		}
+		
+//		for(int i=0;i<p;i++) {
+//			System.out.println(person[i]);
+//		}
+//		
+		int[] resident_num=new int[20];
+		int[] phone_num=new int[20];
+		
+		User user[]=new User[20];
+		for(int i=1;i<p;i++) {
+			String[] tmp=person[i].split("/");
+			user[i].no=Integer.parseInt(tmp[0]);
+			user[i].name=tmp[1];
+			user[i].resident_no=Integer.parseInt(tmp[2]);
+			user[i].address=tmp[3];
+			user[i].phone_no=Integer.parseInt(tmp[4]);
+			user[i].borrow_num=Integer.parseInt(tmp[5]);
+		}
+		
+		for(int i=1;i<p;i++) {
+			System.out.println(resident_num[i]+" "+phone_num[i]);
+		}
+		int res_no=830514;
+		int phone=15428475;
+	        
+		// RSA Ű���� ����
+	        KeyPair keyPair = RSAUtil.genRSAKeyPair();
+
+	        PublicKey publicKey = keyPair.getPublic();
+	        PrivateKey privateKey = keyPair.getPrivate();
+
+	        String plainText = "RSA Encryption test";
+
+	        // Base64 ���ڵ��� ��ȣȭ ���ڿ�
+	        String encrypted = RSAUtil.encryptRSA(plainText, publicKey);
+
+	        // ��ȣȭ
+	        String decrypted = RSAUtil.decryptRSA(encrypted, privateKey);
+
+	        //Assert.assertEquals(plainText, decrypted);
+
+	        // ����Ű�� Base64 ���ڵ��� �������� ����
+	        byte[] bytePublicKey = publicKey.getEncoded();
+	        String base64PublicKey = Base64.getEncoder().encodeToString(bytePublicKey);
+
+	        // ����Ű�� Base64 ���ڵ��� ���ڿ��� ����
+	        byte[] bytePrivateKey = privateKey.getEncoded();
+	        String base64PrivateKey = Base64.getEncoder().encodeToString(bytePrivateKey);
+
+	        // base64 ��ȣȭ�� String ���� Public Key �� �ٽû������� ��ȣȭ �׽�Ʈ�� ����
+	        PublicKey rePublicKey = RSAUtil.getPublicKeyFromBase64Encrypted(base64PublicKey);
+	        String encryptedRe = RSAUtil.encryptRSA(plainText, rePublicKey);
+	        String decryptedRe = RSAUtil.decryptRSA(encryptedRe, privateKey);
+
+	        //Assert.assertEquals(plainText, decryptedRe);
+
+	        // base64 ��ȣȭ�� String ���� Private Key �� �ٽû������� ��ȣȭ �׽�Ʈ�� ����
+	        PrivateKey privateKeyRe = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivateKey);
+	        String decryptedReRe = RSAUtil.decryptRSA(encryptedRe, privateKeyRe);
+
+	        //Assert.assertEquals(decrypted, decryptedReRe);
+	    }
+	
+}

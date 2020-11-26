@@ -1,0 +1,42 @@
+package huffman;
+
+import java.util.*;
+import java.io.*;
+
+//우선순위 큐에 들어갈 노드 클래스 선언
+class Node{
+	public char character;//문자 하나를 의미
+	public int frequency;//출현 빈도수
+	public Node left, right; //왼쪽노드와 오른쪽 노드
+}
+
+class FrequencyComparator implements Comparator<Node>{
+	//빈도수가 낮은 것이 우선순위가 높아 먼저 빠져나올 수 있도록 함
+	public int compare(Node a, Node b) {
+		int frequencyA=a.frequency;
+		int frequencyB=b.frequency;
+		return frequencyA-frequencyB;
+	}
+}
+
+//메인 클레스 정의
+public class Main{
+	
+	public static PriorityQueue<Node> queue; //우선순위 큐 선언
+	public static HashMap <Character, String> charToCode=new HashMap <Character,String>();
+	//문자에 따른 코드 값 해시 맵 할당
+	
+	//각각의 문자 빈도수에 따라서 트리 건축
+	public static Node huffmanCoding(int n) {
+		//큐에서 2개의 노드를 꺼내 빈도수를 합친 뒤, 우선순위 큐의 형태로 재삽입
+		for(int i=0;i<n-1;i++) {
+			Node z=new Node();
+			z.right=queue.poll();
+			z.left=queue.poll();
+			z.frequency=z.right.frequency+z.left.frequency;
+			queue.add(z);
+		}
+		return queue.poll();
+	}
+	
+}

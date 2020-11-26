@@ -1,0 +1,43 @@
+package Ex13_2b;
+
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class Ex13_2b {
+	public static void main(String[] args) throws IOException {
+		String fileName="sequence.txt";
+		ObjectInputStream inputStream=null;
+		try {
+			 inputStream=new ObjectInputStream(new FileInputStream(fileName));
+		}catch(IOException e) {
+			System.out.println("Error opening the file "+fileName);
+			System.exit(0);
+		}
+		
+		byte[] arr=new byte[10];
+		byte prev=0, cnt=0;
+		try {
+			prev=inputStream.readByte();
+			arr[cnt]=prev;
+			while(true) {
+				cnt++;
+				arr[cnt]=(byte)(inputStream.readByte()-prev);
+				prev=inputStream.readByte();
+			}
+			
+		}catch(EOFException e) {
+			System.out.println("The end of file "+fileName);
+			System.exit(0);
+		}
+		inputStream.close();
+		
+		System.out.println("The first integer and the differences for the remaining");
+		for(int i=0;i<10;i++) {
+			System.out.println(arr[i]);
+		}
+		
+	}
+
+}

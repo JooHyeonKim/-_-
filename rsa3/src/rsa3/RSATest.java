@@ -1,0 +1,68 @@
+package rsa3;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Base64;
+
+public class RSATest {
+
+    public static void main(String[] args) throws Exception {
+        // RSA 키쌍 생성
+        KeyPair keyPair = CipherUtil.genRSAKeyPair();
+
+        PublicKey publicKey = keyPair.getPublic();
+        //PrivateKey privateKey = keyPair.getPrivate();
+        
+        BufferedReader fileReader = new BufferedReader(new FileReader("user.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("userEncoding.txt"));
+
+		// a line from the file
+		String line;
+		String[] person=new String[50];
+		//person[]에는 한 사람의 사용자의 정보가 모두 들어가 있음
+		int p=0;
+
+		// read lines until we read a line that is null (i.e. no more lines)
+		while((line = fileReader.readLine()) != null) {
+		       // split the line, returns an array of parts
+		       person[p++] =line; 
+		}
+		fileReader.close();
+		
+		person[0]+="\n";
+		writer.write(person[0]);
+
+		for(int i=1;i<p;i++) { //사람 수 p만큼 루프 돎 
+			String[] tmp=person[i].split("/");
+			
+			for(int j=0;j<9;j++) {//회원목록
+				//System.out.print(tmp[j]+"/");
+				//tmp[0]:회원번호/tmp[1]:회원명/tmp[2]:주민번호/tmp[3]:아이디/tmp[4]:비밀번호/tmp[5]:주소/tmp[6]:전화번호/tmp[7]:대여권수/tmp[8]:위치
+				
+				if(j==2||j==4||j==6) {//주민번호, 비밀번호, 전화번호 암호화
+					//암호화
+					 String encrypted = CipherUtil.encryptRSA(tmp[j], publicKey);
+					 encrypted+="/";
+					 writer.write(encrypted);
+				}
+				else if(j==8) {
+					tmp[j]+="\n";
+					writer.write(tmp[j]);
+				}
+				else {
+					tmp[j]+="/";
+					writer.write(tmp[j]);
+				}
+		
+			}
+		}		
+			writer.close();
+	        
+		}
+   
+}

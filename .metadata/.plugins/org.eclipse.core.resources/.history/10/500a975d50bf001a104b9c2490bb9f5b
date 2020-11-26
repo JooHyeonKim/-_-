@@ -1,0 +1,15 @@
+package Basic;
+
+public class finalExam {
+	public static void main(String[] args) {
+		int[][] table=new int[3][4];
+		
+		for(int r=0;r<table.length;r++) {
+			for(int c=0;c<table[r].length;c++) {
+				table[r][c]=r*5+c;
+				System.out.println(table[r][c]);
+			}
+		}
+	}
+
+}

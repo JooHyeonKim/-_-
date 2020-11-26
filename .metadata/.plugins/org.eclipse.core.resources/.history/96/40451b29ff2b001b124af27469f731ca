@@ -1,0 +1,83 @@
+package rsa2;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+
+public class main {
+	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException {
+
+		BufferedReader fileReader = new BufferedReader(new FileReader("user.txt"));
+
+		// a line from the file
+		String line;
+		String[] person=new String[50];
+		int p=0;
+
+		// read lines until we read a line that is null (i.e. no more lines)
+		while((line = fileReader.readLine()) != null) {
+		       // split the line, returns an array of parts
+		       person[p++] =line; 
+		}
+		
+		for(int i=0;i<p;i++) {
+			System.out.println(person[i]);
+		}
+	        
+		// RSA 키쌍을 생성
+	        KeyPair keyPair = RSAUtil.genRSAKeyPair();
+
+	        PublicKey publicKey = keyPair.getPublic();
+	        PrivateKey privateKey = keyPair.getPrivate();
+
+	        String plainText = "RSA Encryption test";
+
+	        // Base64 인코딩된 암호화 문자열
+	        String encrypted = RSAUtil.encryptRSA(plainText, publicKey);
+
+	        // 복호화
+	        String decrypted = RSAUtil.decryptRSA(encrypted, privateKey);
+
+	        //Assert.assertEquals(plainText, decrypted);
+
+	        // 공개키를 Base64 인코딩한 문자일을 만듦
+	        byte[] bytePublicKey = publicKey.getEncoded();
+	        String base64PublicKey = Base64.getEncoder().encodeToString(bytePublicKey);
+
+	        // 개인키를 Base64 인코딩한 문자열을 만듦
+	        byte[] bytePrivateKey = privateKey.getEncoded();
+	        String base64PrivateKey = Base64.getEncoder().encodeToString(bytePrivateKey);
+
+	        // base64 암호화한 String 에서 Public Key 를 다시생성한후 암호화 테스트를 진행
+	        PublicKey rePublicKey = RSAUtil.getPublicKeyFromBase64Encrypted(base64PublicKey);
+	        String encryptedRe = RSAUtil.encryptRSA(plainText, rePublicKey);
+	        String decryptedRe = RSAUtil.decryptRSA(encryptedRe, privateKey);
+
+	        //Assert.assertEquals(plainText, decryptedRe);
+
+	        // base64 암호화한 String 에서 Private Key 를 다시생성한후 복호화 테스트를 진행
+	        PrivateKey privateKeyRe = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivateKey);
+	        String decryptedReRe = RSAUtil.decryptRSA(encryptedRe, privateKeyRe);
+
+	        //Assert.assertEquals(decrypted, decryptedReRe);
+	    }
+	
+}
